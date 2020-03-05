@@ -1,35 +1,40 @@
+import dotenv from 'dotenv';
 import React, {useState, useEffect} from 'react';
 import axios from 'axios';
 import Loader from './Loader';
+
+
+dotenv.config();
 
 const headers = {
   'X-Api-Key': process.env.REACT_APP_API_KEY,
   'Accept': 'application/json',
 }
 
-console.log(process.env.REACT_APP_API_KEY);
+console.log('Process.env: ', process.env);
+console.log('API KEY: ', process.env.REACT_APP_API_KEY);
 
 function LandingPage() {
   const [parks, setParks] = useState([]);
   const [load, setLoad] = useState(false);
 
-  // useEffect(() => {
-  //   let url = `https://developer.nps.gov/api/v1/parks?parkCode=&limit=5&api_key=${process.env.REACT_APP_API_KEY}`;
-  //   console.log(headers);
-  //   console.log(url);
+  useEffect(() => {
+    let url = `https://developer.nps.gov/api/v1/parks?parkCode=&limit=5&api_key=${process.env.REACT_APP_API_KEY}`;
+    console.log(headers);
+    console.log(url);
     
-  //   axios.get(url, headers)
-  //     .then(response => {
-  //       let allParks = response.data;
-  //       console.log(allParks.data);
-  //       setParks(allParks.data);
-  //       setLoad(true);
-  //     })
-  //     .catch(err => {
-  //       console.log(err);
-  //       setLoad(true);
-  //     })
-  // }, []);
+    axios.get(url, headers)
+      .then(response => {
+        let allParks = response.data;
+        console.log(allParks.data);
+        setParks(allParks.data);
+        setLoad(true);
+      })
+      .catch(err => {
+        console.log(err);
+        setLoad(true);
+      })
+  }, []);
 
   let content;
 
