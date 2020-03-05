@@ -1,0 +1,20 @@
+{
+  "name": "national-parks",
+  "version": "1.0.0",
+  "description": "national-parks-app",
+  "main": "server.js",
+  "scripts": {
+    "start": "nodemon server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ngolodets/national-parks.git"
+  },
+  "author": "NG",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ngolodets/national-parks/issues"
+  },
+  "homepage": "https://github.com/ngolodets/national-parks#readme"
+}
