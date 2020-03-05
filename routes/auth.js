@@ -1,6 +1,6 @@
 const express = require('express'); //--> creates routes
 const router = express.Router();
-const User = require('./user');
+const User = require('../models/user');
 const jwt = require('jsonwebtoken'); //--> creates tokens
 
 // Route for signup -- POST /auth/signup

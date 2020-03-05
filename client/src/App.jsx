@@ -2,12 +2,13 @@ import React, {useState, useEffect} from 'react';
 import axios from 'axios';
 import Login from './Login';
 import Signup from './Signup';
+import LandingPage from './LandingPage';
 
 //import './App.css';
 
 function App() {
   const [token, setToken] = useState('');
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState({});
   const [errorMessage, setErrorMessage] = useState('');
   const [apiData, setApiData] = useState(null);
 
@@ -57,6 +58,7 @@ function App() {
         <p>Please sign up or login...</p>
         <Login liftToken={setToken} />
         <Signup liftToken={setToken} />
+        <LandingPage />
       </>
     )
   }

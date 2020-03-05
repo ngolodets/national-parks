@@ -31,7 +31,7 @@ const signupLimiter = new RateLimit({
   message: "Maximum accounts created. Please try again later."
 });
 
-mongoose.connect(process.env.MONGODB_URI, {useNewUrlParser: true});
+mongoose.connect(process.env.MONGODB_URI, {useNewUrlParser: true, useUnifiedTopology: true});
 const db = mongoose.connection;
 db.once('open', () => {
   console.log(`🍭🍭🍭🍭 Connected to Mongo on ${db.host}:${db.port} 🍭🍭🍭🍭`);
@@ -43,8 +43,9 @@ db.on('error', (err) => {
 //app.use('/auth/login', loginLimiter);
 //app.use('/auth/signup', signupLimiter);
 
-app.use('/auth', require('./models/auth'));
-app.use('/api', expressJWT({secret: process.env.JWT_SECRET}), require('./models/api'));
+app.use('/auth', require('./routes/auth'));
+app.use('/api', expressJWT({secret: process.env.JWT_SECRET}), require('./routes/api'));
+app.use('/home', require('./routes/home'));
 
 app.listen(process.env.PORT, () => {
   console.log(`🦋🦋🦋🦋... Listening on ${process.env.PORT} ...🦋🦋🦋🦋`);
