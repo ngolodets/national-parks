@@ -30,7 +30,8 @@ function Signup({liftToken}) {
         setName('');
         setEmail('');
         setPassword('');
-        setMessage(res.data.message)
+        setMessage(res.data.message);
+        console.log(message);
       } else {
         localStorage.setItem('mernToken', res.data.token)
         liftToken(res.data)

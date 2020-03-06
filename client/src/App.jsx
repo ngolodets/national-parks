@@ -27,6 +27,7 @@ function App() {
             setToken('');
             setUser({});
             setErrorMessage(res.data.message);
+            console.log(errorMessage);
           } else {
             localStorage.setItem('mernToken', res.data.token);
             setToken(res.data.token);
@@ -35,7 +36,7 @@ function App() {
           }
         })
     }
-  }, [token]);
+  }, [errorMessage, token]);
 
   function logout() {
     localStorage.removeItem('mernToken');
