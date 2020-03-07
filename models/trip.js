@@ -4,11 +4,16 @@ const tripSchema = new mongoose.Schema({
   state: String,
   campground: String,
   event: String,
+  user: {
+    type: mongoose.Schema.Types.ObjectId, 
+    ref: 'User'
+  },
   parks: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Park'
   }],
-  isFave: Boolean
+  isFave: Boolean,
+  comments: String
 });
 
 module.exports = mongoose.model('Trip', tripSchema);
