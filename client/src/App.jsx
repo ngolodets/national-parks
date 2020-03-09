@@ -4,7 +4,7 @@ import Login from './Login';
 import Signup from './Signup';
 import LandingPage from './LandingPage';
 
-//import './App.css';
+import './index.css';
 
 function App() {
   const [token, setToken] = useState('');

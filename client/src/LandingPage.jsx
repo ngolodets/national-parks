@@ -17,20 +17,32 @@ function LandingPage() {
 
   useEffect(() => {
     let url = `https://developer.nps.gov/api/v1/parks?parkCode=&limit=5&api_key=${process.env.REACT_APP_API_KEY}`;
-    //console.log(headers);
-    //console.log(url);
-    
-    axios.get(url, headers)
-      .then(response => {
-        let allParks = response.data;
-        console.log(allParks.data);
-        setParks(allParks.data);
-        setLoad(true);
-      })
-      .catch(err => {
-        console.log(err);
-        setLoad(true);
-      })
+
+    const CancelToken = axios.CancelToken;
+    const source = CancelToken.source();
+
+    const loadData = () => {
+      try {
+        axios.get(url, {cancelToken: source.token}, headers)
+          .then(response => {
+            let allParks = response.data;
+            console.log(allParks.data);
+            setParks(allParks.data);
+            setLoad(true);
+          });
+      } catch (err) {
+        if (axios.isCancel(err)) {
+          console.log('Cancelled', err);
+        } else {
+          throw err;
+        }
+      }
+    };
+
+    loadData();
+    return () => {
+      source.cancel();
+    }
   }, []);
 
   let content;
@@ -40,18 +52,20 @@ function LandingPage() {
     
     content = allParks.map((park, index) => {
       let images = park.images;
-      let pic = images.map((image, indx) => {
-        return (
-          <div key={indx}>
-            <img src={image.url} alt={image.alt}/>
-          </div>
-        )
-      })
+      
+      // let pic = images.map((image, indx) => {
+      //   return (
+      //     <div key={indx}>
+      //       <img src={image.url} alt={image.alt}/>
+      //     </div>
+      //   )
+      // })
       return (
         <div key={index}>
           <p>{park.name}</p>
           <p>{park.states}</p>
-          {pic}
+          <img className='landingPagePics' src={images[0].url} alt={images.url}/>
+          {/* {pic} */}
         </div>
       )
     })
