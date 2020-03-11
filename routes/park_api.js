@@ -29,27 +29,55 @@ router.get('/parks/:parkid', (req, res) => {
   });
 });
 
-//POST /park_api/parks --> add a park to user's list - WORKS
 router.post('/parks', (req, res) => {
   User.findById(req.user._id, (err, user) => {
     if (err) res.json(err);
-    Park.create({
-      name: req.body.name,
-      state: req.body.state,
-      coordinates: req.body.coordinates,
-      code: req.code,
-      user: req.params._id
-    },
-    (err, park) => {
-      if (err) res.json(err);
-      user.parks.push(park);
-      user.save((err, user) => {
+    Park.findOne({name: req.body.name},
+      (err, park) => {
         if (err) res.json(err);
-        res.json(user);
+        if (!park) {
+          Park.create({
+            name: req.body.name,
+            state: req.body.state,
+            coordinates: req.body.coordinates,
+            code: req.code,
+            user: req.params._id
+          },
+          (err, park) => {
+            if (err) res.json(err);
+            user.parks.push(park);
+            user.save((err, user) => {
+              if (err) res.json(err);
+              res.json(user);
+            })
+          })
+        } else {
+          res.json(user);
+        }
       })
-    })
   })
-});
+})
+//POST /park_api/parks --> add a park to user's list - WORKS
+// router.post('/parks', (req, res) => {
+//   User.findById(req.user._id, (err, user) => {
+//     if (err) res.json(err);
+//     Park.create({
+//       name: req.body.name,
+//       state: req.body.state,
+//       coordinates: req.body.coordinates,
+//       code: req.code,
+//       user: req.params._id
+//     },
+//     (err, park) => {
+//       if (err) res.json(err);
+//       user.parks.push(park);
+//       user.save((err, user) => {
+//         if (err) res.json(err);
+//         res.json(user);
+//       })
+//     })
+//   })
+// });
 
 //PUT /park_api/parks/:parkid --> update park - WORKS
 router.put('/parks/:parkid', (req, res) => {
