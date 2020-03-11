@@ -104,9 +104,9 @@ router.get('/trips/:tripid/parks/:parkid', (req, res) => {
   })
 })
 
-//POST api/trips/:tripid/parks --> add park to the trip
-router.post('trips/:tripid/parks', (req, res) => {
-  console.log(' ######## Hitting PARK POST route #######');
+//POST api/trips/:tripid/parks --> add park to the trip - WORKS
+router.post('/trips/:tripid/parks', (req, res) => {
+  //console.log(' ######## Hitting PARK POST route #######');
   Trip.findById(req.params.tripid,
     (err, trip) => {
       if (err) res.json(err);
@@ -127,27 +127,5 @@ router.post('trips/:tripid/parks', (req, res) => {
       })
     })
 });
-
-/*
-
-app.post('/artists/:id/albums', (req, res) =>{
-  Artist.findById(req.params.id, function(err, artist) {
-    Album.create({
-      name: req.body.name, 
-      released: req.body.released,
-      length: req.body.length,
-      genre: req.body.genre,
-      producer: req.body.producer,
-      artist: req.params.id
-      }, function(err,album){
-          artist.albums.push(album)
-          artist.save(function(err, artist){
-            if (err) res.json(err)
-            res.json(artist)
-      })
-    })
-  })
-})
-*/
 
 module.exports = router;
