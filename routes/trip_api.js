@@ -33,21 +33,30 @@ router.get('/trips/:tripid', (req, res) => {
 router.post('/trips', (req, res) => {
   User.findById(req.user._id, (err, user) => {
     if (err) res.json(err);
-    Trip.create({
-      state: req.body.state,
-      campground: req.body.campground,
-      event: req.body.event,
-      parks: req.body.parks,
-      user: req.params._id
-    },
-    (err, trip) => {
-      if (err) res.json(err);
-      user.trips.push(trip);
-      user.save((err, user) => {
+    Trip.findOne({name: req.body.name},
+      (err, trip) => {
         if (err) res.json(err);
-        res.json(user);
+        if (!trip) {
+          Trip.create({
+            name: req.body.name,
+            state: req.body.state,
+            campground: req.body.campground,
+            event: req.body.event,
+            parks: req.body.parks,
+            user: req.params._id
+          },
+          (err, trip) => {
+            if (err) res.json(err);
+            user.trips.push(trip);
+            user.save((err, user) => {
+              if (err) res.json(err);
+              res.json(user);
+            })
+          })
+        } else {
+          res.json(user);
+        }
       })
-    })
   })
 });
 
@@ -60,6 +69,7 @@ router.put('/trips/:tripid', (req, res) => {
       Trip.findByIdAndUpdate(
         req.params.tripid,
         {
+          name: req.body.name,
           comments: req.body.comments
         },
         {new: true},
@@ -102,7 +112,7 @@ router.get('/trips/:tripid/parks/:parkid', (req, res) => {
     if (err) res.json(err)
     res.json(park)
   })
-})
+});
 
 //POST trip_api/trips/:tripid/parks --> add park to the trip - WORKS
 router.post('/trips/:tripid/parks', (req, res) => {
@@ -110,21 +120,30 @@ router.post('/trips/:tripid/parks', (req, res) => {
   Trip.findById(req.params.tripid,
     (err, trip) => {
       if (err) res.json(err);
-      Park.create({
-        name: req.body.name,
-        state: req.body.state,
-        coordinates: req.body.coordinates,
-        code: req.body.code,
-        trip: req.params.tripid
-      },
-      (err, park) => {
-        if (err) res.json(err);
-        trip.parks.push(park);
-        trip.save((err, trip) => {
+
+      Park.findOne({name: req.body.name, code: req.body.code},
+        (err, park) => {
           if (err) res.json(err);
-          res.json(trip);
+          if (park === null) {
+            Park.create({
+              name: req.body.name,
+              state: req.body.state,
+              coordinates: req.body.coordinates,
+              code: req.body.code,
+              trip: req.params.tripid
+            },
+            (err, park) => {
+              if (err) res.json(err);
+              trip.parks.push(park);
+              trip.save((err, trip) => {
+                if (err) res.json(err);
+                res.json(trip);
+              })
+            })
+          } else {
+            res.json(trip);
+          }
         })
-      })
     })
 });
 
