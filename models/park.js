@@ -7,10 +7,10 @@ const parkSchema = new mongoose.Schema({
   code: String,
   comments: String,
   isFave: Boolean,
-  // trips: [{
-  //   type: mongoose.Schema.Types.ObjectId,
-  //   ref: 'Trip'
-  // }]
+  user: {
+    type: mongoose.Schema.Types.ObjectId, 
+    ref: 'User'
+  },
   trip: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Trip'

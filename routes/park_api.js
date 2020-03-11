@@ -1,39 +1,26 @@
 const express = require('express');
 const router = express.Router();
-const {Trip, Park} = require('../models/trip');
+const User = require('../models/user');
+const Park = require('../models/park');
+const Trip = require('../models/trip');
 
-//GET --> display parks on the trip
+//TEST
+router.get('/', (req, res) => {
+  res.json({type: 'success', message: "You accessed the protected park_api routes"});
+});
+
+//GET --> display all user's parks
 router.get('/parks', (req, res) => {
-  
-  Trip.findById(req.trips._id)
+  User.findById(req.user._id)
     .populate('parks')
-      .exec((err, trip) => {
+      .exec((err, user) => {
         if (err) res.json(err);
-        res.json(trip);
+        res.json(user);
       })
+    
 })
 
 
-//POST /api/parks --> add part to the trip
-router.post('trips/:tripid/parks', (req, res) => {
-  Trip.findById(req.params.tripid,
-    (err, trip) => {
-      if (err) res.json(err);
-      Park.create({
-        name: req.body.name,
-        state: req.body.state,
-        coordinates: req.body.coordinates,
-        code: req.body.code
-      },
-      (err, park) => {
-        if (err) res.json(err);
-        trip.parks.push(park);
-        trip.save((err, trip) => {
-          if (err) res.json(err);
-          res.json(trip);
-        })
-      })
-    })
-});
+
 
 module.exports = router;

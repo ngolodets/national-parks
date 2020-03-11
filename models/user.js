@@ -23,6 +23,10 @@ const userSchema = new mongoose.Schema({
   trips: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Trip'
+  }],
+  parks: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Park'
   }]
 });
 

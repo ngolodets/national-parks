@@ -4,12 +4,12 @@ const User = require('../models/user');
 const Trip = require('../models/trip');
 const Park = require('../models/park');
 
-//Testring /api/ route - WORKS
+//Testring /trip_api/ route - WORKS
 router.get('/', (req, res) => {
-  res.json({type: 'success', message: "You accessed the protected api routes"})
+  res.json({type: 'success', message: "You accessed the protected trip_api routes"});
 });
 
-//GET /api/trips --> show all user's trips - WORKS
+//GET /trip_api/trips --> show all user's trips - WORKS
 router.get('/trips', (req, res) => {
   User.findById(req.user._id)
     .populate('trips')
@@ -19,7 +19,7 @@ router.get('/trips', (req, res) => {
   });
 });
 
-//GET /api/trips/:tripid --> show selected trip - WORKS
+//GET /trip_api/trips/:tripid --> show selected trip - WORKS
 router.get('/trips/:tripid', (req, res) => {
   Trip.findById(
     req.params.tripid, 
@@ -29,7 +29,7 @@ router.get('/trips/:tripid', (req, res) => {
   });
 });
 
-//POST /api/trips --> add a trip to user's list - WORKS
+//POST /trip_api/trips --> add a trip to user's list - WORKS
 router.post('/trips', (req, res) => {
   User.findById(req.user._id, (err, user) => {
     if (err) res.json(err);
@@ -51,7 +51,7 @@ router.post('/trips', (req, res) => {
   })
 });
 
-//PUT /api/trips/:tripid --> update trip - WORKS
+//PUT /trip_api/trips/:tripid --> update trip - WORKS
 router.put('/trips/:tripid', (req, res) => {
   User.findById(
     req.user._id,
@@ -72,7 +72,7 @@ router.put('/trips/:tripid', (req, res) => {
   )
 });
 
-//DELETE /api/trips/:tripid --> delete trip from user's list - WORKS
+//DELETE /trip_api/trips/:tripid --> delete trip from user's list - WORKS
 router.delete('/trips/:tripid', (req, res) => {
   User.findById(req.user._id, (err, user) => {
     if (err) res.json(err);
@@ -84,7 +84,7 @@ router.delete('/trips/:tripid', (req, res) => {
   })
 });
 
-//GET api/trips/:tripid/parks --> show all parks added to the trip - WORKS
+//GET trip_api/trips/:tripid/parks --> show all parks added to the trip - WORKS
 router.get('/trips/:tripid/parks', (req, res) => {
   Trip.findById(req.params.tripid)
     .populate('parks')
@@ -104,7 +104,7 @@ router.get('/trips/:tripid/parks/:parkid', (req, res) => {
   })
 })
 
-//POST api/trips/:tripid/parks --> add park to the trip - WORKS
+//POST trip_api/trips/:tripid/parks --> add park to the trip - WORKS
 router.post('/trips/:tripid/parks', (req, res) => {
   //console.log(' ######## Hitting PARK POST route #######');
   Trip.findById(req.params.tripid,
@@ -128,7 +128,7 @@ router.post('/trips/:tripid/parks', (req, res) => {
     })
 });
 
-//PUT api/trips/:tripid/parks/:parkid --> update park info - WORKS
+//PUT trip_api/trips/:tripid/parks/:parkid --> update park info - WORKS
 router.put('/trips/:tripid/parks/:parkid', (req, res) => {
   Trip.findById(
     req.params.tripid,
@@ -147,9 +147,9 @@ router.put('/trips/:tripid/parks/:parkid', (req, res) => {
       )
     }
   )
-})
+});
 
-//DELETE api/trips/:tripid/parks/:parkid --> delete park from particular trip - WORKS
+//DELETE trip_api/trips/:tripid/parks/:parkid --> delete park from particular trip - WORKS
 router.delete('/trips/:tripid/parks/:parkid', (req, res) => {
   Trip.findById(
     req.params.tripid,
