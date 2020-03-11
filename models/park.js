@@ -13,7 +13,7 @@ const parkSchema = new mongoose.Schema({
   // }]
   trip: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Park'
+    ref: 'Trip'
   }
 });
 

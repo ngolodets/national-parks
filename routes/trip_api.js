@@ -29,16 +29,6 @@ router.get('/trips/:tripid', (req, res) => {
   });
 });
 
-//GET api/trips/:tripid/parks --> show all parks added to the trip
-router.get('/trips/:tripid/parks', (req, res) => {
-  Trip.findById(req.params.tripid)
-    .populate('parks')
-      .exec((err, trip) => {
-        if (err) res.json(err);
-        res.json(trip);
-  })
-});
-
 //POST /api/trips --> add a trip to user's list - WORKS
 router.post('/trips', (req, res) => {
   User.findById(req.user._id, (err, user) => {
@@ -94,7 +84,17 @@ router.delete('/trips/:tripid', (req, res) => {
   })
 });
 
-//GET /trips/:tripsid/parks/:parkid
+//GET api/trips/:tripid/parks --> show all parks added to the trip - WORKS
+router.get('/trips/:tripid/parks', (req, res) => {
+  Trip.findById(req.params.tripid)
+    .populate('parks')
+      .exec((err, trip) => {
+        if (err) res.json(err);
+        res.json(trip);
+  })
+});
+
+//GET /trips/:tripsid/parks/:parkid --> get park info for a particular trip - WORKS
 router.get('/trips/:tripid/parks/:parkid', (req, res) => {
   Park.findById(
     req.params.parkid, 
@@ -106,75 +106,29 @@ router.get('/trips/:tripid/parks/:parkid', (req, res) => {
 
 //POST api/trips/:tripid/parks --> add park to the trip
 router.post('trips/:tripid/parks', (req, res) => {
-  console.log('Hitting PARK POST route...')
-  User.findById(
-    req.user._id,
-    (err, user) => {
+  console.log(' ######## Hitting PARK POST route #######');
+  Trip.findById(req.params.tripid,
+    (err, trip) => {
       if (err) res.json(err);
-      Trip.findById(
-        req.params.tripid,
-        (err, trip) => {
+      Park.create({
+        name: req.body.name,
+        state: req.body.state,
+        coordinates: req.body.coordinates,
+        code: req.body.code,
+        trip: req.params.tripid
+      },
+      (err, park) => {
+        if (err) res.json(err);
+        trip.parks.push(park);
+        trip.save((err, trip) => {
           if (err) res.json(err);
-          Park.create({
-            name: req.body.name,
-            state: req.body.state,
-            coordinates: req.body.coordinates,
-            code: req.body.code
-          },
-          (err, park) => {
-            if (err) res.json(err);
-            trip.parks.push(park);
-            trip.save((err, trip) => {
-              if (err) res.json(err);
-              res.json(trip);
-            })
-          }
-          )
-        }
-      )
-    }
-  )
-  // Trip.findById(req.params.tripid,
-  //   (err, trip) => {
-  //     if (err) res.json(err);
-  //     Park.create({
-  //       name: req.body.name,
-  //       state: req.body.state,
-  //       coordinates: req.body.coordinates,
-  //       code: req.body.code
-  //     },
-  //     (err, park) => {
-  //       if (err) res.json(err);
-  //       trip.parks.push(park);
-  //       trip.save((err, trip) => {
-  //         if (err) res.json(err);
-  //         res.json(trip);
-  //       })
-  //     })
-  //   })
+          res.json(trip);
+        })
+      })
+    })
 });
 
 /*
-app.post('/artists', (req, res) => {
-  let artist = new Artist({ //----> can also use something like that instead of code below
-    name: req.body.name,
-    origin: req.body.origin,
-    yearsActive: req.body.yearsActive
-  });
-  artist.save((err, queen) => {
-    res.json(queen)
-  })
-//   Artist.create({
-//     name: req.body.name,
-//     origin: req.body.origin,
-//     yearsActive: req.body.yearsActive 
-//   },
-//     function(err, artist) {
-//       if (err) res.json(err)
-//       res.json(artist)
-//     }
-//   )
-})
 
 app.post('/artists/:id/albums', (req, res) =>{
   Artist.findById(req.params.id, function(err, artist) {
