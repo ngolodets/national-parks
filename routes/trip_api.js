@@ -128,4 +128,27 @@ router.post('/trips/:tripid/parks', (req, res) => {
     })
 });
 
+//DELETE api/trips/:tripid/parks/:parkid --> delete park from particular trip - WORKS
+router.delete('/trips/:tripid/parks/:parkid', (req, res) => {
+  Trip.findById(
+    req.params.tripid,
+    (err, trip) => {
+      if (err) res.json(err);
+      trip.parks.pull(req.params.parkid);
+      trip.save((err, trip) => {
+        if (err) res.json(err);
+        Park.deleteOne({_id: req.params.parkid},
+          (err) => {
+            if (err) res.json(err);
+            res.json(trip);
+          })
+      })
+    }
+  )
+});
+
+/*
+
+*/
+
 module.exports = router;
