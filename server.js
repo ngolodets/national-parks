@@ -44,7 +44,8 @@ db.on('error', (err) => {
 //app.use('/auth/signup', signupLimiter);
 
 app.use('/auth', require('./routes/auth'));
-app.use('/trips', expressJWT({secret: process.env.JWT_SECRET}), require('./routes/api'));
+app.use('/trip_api', expressJWT({secret: process.env.JWT_SECRET}), require('./routes/trip_api'));
+app.use('/park_api', expressJWT({secret: process.env.JWT_SECRET}), require('./routes/park_api'))
 app.use('/', require('./routes/landing'));
 
 app.listen(process.env.PORT, () => {

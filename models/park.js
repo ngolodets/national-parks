@@ -7,10 +7,14 @@ const parkSchema = new mongoose.Schema({
   code: String,
   comments: String,
   isFave: Boolean,
-  trips: [{
+  // trips: [{
+  //   type: mongoose.Schema.Types.ObjectId,
+  //   ref: 'Trip'
+  // }]
+  trip: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Trip'
-  }]
+    ref: 'Park'
+  }
 });
 
 module.exports = mongoose.model('Park', parkSchema);
