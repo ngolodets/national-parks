@@ -128,6 +128,27 @@ router.post('/trips/:tripid/parks', (req, res) => {
     })
 });
 
+//PUT api/trips/:tripid/parks/:parkid --> update park info - WORKS
+router.put('/trips/:tripid/parks/:parkid', (req, res) => {
+  Trip.findById(
+    req.params.tripid,
+    (err, trip) => {
+      if (err) res.json(err);
+      Park.findByIdAndUpdate(
+        req.params.parkid,
+        {
+          comments: req.body.comments
+        },
+        {new: true},
+        (err, park) => {
+          if (err) res.json(err);
+          res.json(park);
+        }
+      )
+    }
+  )
+})
+
 //DELETE api/trips/:tripid/parks/:parkid --> delete park from particular trip - WORKS
 router.delete('/trips/:tripid/parks/:parkid', (req, res) => {
   Trip.findById(
@@ -146,9 +167,5 @@ router.delete('/trips/:tripid/parks/:parkid', (req, res) => {
     }
   )
 });
-
-/*
-
-*/
 
 module.exports = router;
