@@ -3,6 +3,7 @@ import axios from 'axios';
 import Login from './Login';
 import Signup from './Signup';
 import LandingPage from './LandingPage';
+//import ParksByState from './ParksByState';
 
 import './index.css';
 
@@ -10,7 +11,7 @@ function App() {
   const [token, setToken] = useState('');
   const [user, setUser] = useState({});
   const [errorMessage, setErrorMessage] = useState('');
-  const [apiData, setApiData] = useState(null);
+  //const [apiData, setApiData] = useState(null);
 
   useEffect(() => {
     var token = localStorage.getItem('mernToken');
@@ -60,6 +61,7 @@ function App() {
         <Login liftToken={setToken} />
         <Signup liftToken={setToken} />
         <LandingPage />
+        {/* <ParksByState /> */}
       </>
     )
   }

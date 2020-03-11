@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const User = require('../models/user');
-const Trip = require('../models/trip');
-const Park = require('../models/park');
+const {User, Trip, Park} = require('../models/user');
+// const Trip = require('../models/trip');
+// const Park = require('../models/park');
 
 //Testring /api/ route - WORKS
 router.get('/', (req, res) => {
@@ -21,7 +21,9 @@ router.get('/trips', (req, res) => {
 
 //GET /api/trips/:tripid --> show selected trip - WORKS
 router.get('/trips/:tripid', (req, res) => {
-  Trip.findById(req.params.tripid, (err, trip) => {
+  Trip.findById(
+    req.params.tripid, 
+    (err, trip) => {
     if (err) res.json(err);
     res.json(trip);
   });
@@ -30,6 +32,7 @@ router.get('/trips/:tripid', (req, res) => {
 //POST /api/trips --> add a trip to user's list - WORKS
 router.post('/trips', (req, res) => {
   User.findById(req.user._id, (err, user) => {
+    if (err) res.json(err);
     Trip.create({
       state: req.body.state,
       campground: req.body.campground,
@@ -53,6 +56,7 @@ router.put('/trips/:tripid', (req, res) => {
   User.findById(
     req.user._id,
     (err, user) => {
+      if (err) res.json(err);
       Trip.findByIdAndUpdate(
         req.params.tripid,
         {
@@ -71,6 +75,7 @@ router.put('/trips/:tripid', (req, res) => {
 //DELETE /api/trips/:tripid --> delete trip from user's list - WORKS
 router.delete('/trips/:tripid', (req, res) => {
   User.findById(req.user._id, (err, user) => {
+    if (err) res.json(err);
     user.trips.pull(req.params.tripid);
     user.save((err) => {
       if (err) res.json(err);
