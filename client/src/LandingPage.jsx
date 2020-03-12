@@ -11,6 +11,8 @@ const headers = {
   'Accept': 'application/json',
 }
 
+//response.setHeader("Set-Cookie", "HttpOnly;Secure;SameSite=Strict");
+
 function LandingPage() {
   const [parks, setParks] = useState([]);
   const [load, setLoad] = useState(false);
@@ -22,26 +24,26 @@ function LandingPage() {
     const source = CancelToken.source();
 
     const loadData = () => {
-      try {
-        axios.get(url, {cancelToken: source.token}, headers)
-          .then(response => {
-            let allParks = response.data;
-            console.log(allParks.data);
-            setParks(allParks.data);
-            setLoad(true);
-          });
-      } catch (err) {
-        if (axios.isCancel(err)) {
-          console.log('Cancelled', err);
-        } else {
-          throw err;
-        }
-      }
+      axios.get(url, {cancelToken: source.token}, headers)
+        .then((response) => {
+          console.log(response.headers);
+          let allParks = response.data;
+          console.log(allParks.data);
+          setParks(allParks.data);
+          setLoad(true);
+        })
+        .catch((err) => {
+          if (axios.isCancel(err)) {
+            console.log('Request Cancelled ', err.message);
+          } else {
+            console.log('Something went wrong ', err.message);
+          }
+      })
     };
 
     loadData();
     return () => {
-      source.cancel();
+      source.cancel(); 
     }
   }, []);
 

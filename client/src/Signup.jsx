@@ -33,11 +33,11 @@ function Signup({liftToken}) {
         setMessage(res.data.message);
         console.log(message);
       } else {
-        localStorage.setItem('mernToken', res.data.token)
-        liftToken(res.data)
+        localStorage.setItem('mernToken', res.data.token);
+        liftToken(res.data);
       }
     }).catch(err => {
-      setMessage("Maximum accounts exceeded. Please try again later.")
+      setMessage("Maximum accounts exceeded. Please try again later.");
     })
   }
 
