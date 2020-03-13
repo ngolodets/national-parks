@@ -3,7 +3,7 @@ import axios from 'axios';
 import Login from './Login';
 import Signup from './Signup';
 import LandingPage from './LandingPage';
-//import ParksByState from './ParksByState';
+import ParksByState from './ParksByState';
 
 import './index.css';
 
@@ -52,6 +52,7 @@ function App() {
       <>
         <p>Hello, {user.name}</p>
         <div onClick={logout}>LOGOUT</div>
+        <ParksByState />
       </>
     )
   } else {
@@ -61,7 +62,6 @@ function App() {
         <Login liftToken={setToken} />
         <Signup liftToken={setToken} />
         <LandingPage />
-        {/* <ParksByState /> */}
       </>
     )
   }

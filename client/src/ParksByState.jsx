@@ -11,7 +11,7 @@ const headers = {
 }
 
 function ParksByState() {
-  const[allParks, setAllParks] = useState([]);
+  const [allParks, setAllParks] = useState([]);
   const [load, setLoad] = useState(false);
 
   useEffect(() => {
@@ -21,21 +21,20 @@ function ParksByState() {
     const source = CancelToken.source();
 
     const loadData = () => {
-      try {
-        axios.get(url, {cancelToken: source.token}, headers)
-          .then(response => {
-            let parks = response.data;
-            console.log(parks.data);
-            setAllParks(parks.data);
-            setLoad(true);
-          });
-      } catch (err) {
-        if (axios.isCancel(err)) {
-          console.log('Cancelled', err);
-        } else {
-          throw err;
-        }
-      }
+      axios.get(url, {cancelToken: source.token}, headers)
+        .then(response => {
+          let parks = response.data;
+          console.log(parks.data);
+          setAllParks(parks.data);
+          setLoad(true);
+        })
+        .catch((err) => {
+          if (axios.isCancel(err)) {
+            console.log('Request Cancelled:', err.message);
+          } else {
+            console.log('Something went wrong ', err.message);
+          }
+      })
     };
 
     loadData();
@@ -51,7 +50,7 @@ function ParksByState() {
 
     content = parks.map((park, index) => {
       return (
-        <div>
+        <div key={index}>
           <p>{park.name}</p>
         </div>
       )

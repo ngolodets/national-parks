@@ -36,7 +36,7 @@ router.post('/trips', (req, res) => {
     Trip.findOne({name: req.body.name},
       (err, trip) => {
         if (err) res.json(err);
-        if (!trip) {
+        if (trip === null) {
           Trip.create({
             name: req.body.name,
             state: req.body.state,

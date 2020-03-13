@@ -32,15 +32,15 @@ router.get('/parks/:parkid', (req, res) => {
 router.post('/parks', (req, res) => {
   User.findById(req.user._id, (err, user) => {
     if (err) res.json(err);
-    Park.findOne({name: req.body.name},
+    Park.findOne({name: req.body.name, code: req.body.code},
       (err, park) => {
         if (err) res.json(err);
-        if (!park) {
+        if (park === null) {
           Park.create({
             name: req.body.name,
             state: req.body.state,
             coordinates: req.body.coordinates,
-            code: req.code,
+            code: req.body.code,
             user: req.params._id
           },
           (err, park) => {
