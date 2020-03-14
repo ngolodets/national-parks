@@ -2,11 +2,11 @@ import React, {useState} from 'react';
 import axios from 'axios';
 import Home from './Home';
 
-function Login({liftToken}) {
+function Login({liftToken, isLoggedIn, selectedSignup, selectedLogin}) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  //const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   function handleEmailChange(e) {
     setEmail(e.target.value);
@@ -27,14 +27,14 @@ function Login({liftToken}) {
       } else {
         localStorage.setItem('mernToken', res.data.token);
         liftToken(res.data);
-        setIsLoggedIn(true);
+        //setIsLoggedIn(true);
       }
     }).catch(err => {
       setMessage("Maximum login attempts exceeded. Please try again later.")
     })
   }
 
-  if (isLoggedIn) {
+  if (isLoggedIn && selectedLogin && !selectedSignup) {
     return (
       <>
         <Home />
@@ -42,7 +42,7 @@ function Login({liftToken}) {
     )
   } else {
     return ( 
-      <div className='login'> 
+      <div className='login' style={{display: selectedSignup ? 'none' : 'inline-block'}}> 
         <h3>Log into Your Account:</h3>
         <form onSubmit={handleSubmit}>
           <input onChange={handleEmailChange} 

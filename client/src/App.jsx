@@ -21,6 +21,8 @@ function App() {
   const [user, setUser] = useState({});
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [selectedLogin, setSelectedLogin] = useState(false);
+  const [selectedSignup, setSelectedSignup] = useState(false);
   //const [apiData, setApiData] = useState(null);
 
   useEffect(() => {
@@ -93,18 +95,13 @@ function App() {
               <Link to={'/home'} className='nav-link'>Home</Link>
             </li>
             <li>
-              <Link to={'/login'} className='nav-link'>Login</Link>
+              <Link to={'/login'} className='nav-link'>Login | Signup</Link>
             </li>
-            <li>
+            {/* <li>
               <Link to={'/signup'} className='nav-link'>Signup</Link>
-            </li>
+            </li> */}
             <li onClick={logout}>
-              <Link to='/logout' className='nav-link'>
-                Logout
-              </Link>
-              {/* <a href='#' style={{textDecoration: 'none', color: 'gray'}}>
-                Logout
-              </a> */}
+              <Link to='/logout' className='nav-link'>Logout</Link>
             </li>
           </ul>
         </nav>
@@ -113,8 +110,19 @@ function App() {
 
         <Switch>
           {/* <Route path='/login' component={Login} liftToken={setToken} setIsLoggedIn={setIsLoggedIn} /> */}
-          <Route path='/login' render={() => <Login liftToken={setToken} />} />
-          <Route path='/signup' render={() => <Signup liftToken={setToken} />} />
+          <Route path='/login' 
+              render={() => 
+                <>
+                  <div onClick={() => setSelectedLogin(true)} >
+                    <Login liftToken={setToken} isLoggedIn={isLoggedIn} selectedSignup={selectedSignup} selectedLogin={selectedLogin}/>
+                  </div>
+                  <div onClick={() => setSelectedSignup(true)} >
+                    <Signup liftToken={setToken} isLoggedIn={isLoggedIn} selectedSignup={selectedSignup} selectedLogin={selectedLogin}/>
+                  </div>
+                </>
+              } 
+          />
+          {/* <Route path='/signup' render={() => <Signup liftToken={setToken} />} /> */}
           <Route exact path='/'>
             {isLoggedIn ? <Redirect to='/home' /> : <LandingPage />}
           </Route>
@@ -130,7 +138,14 @@ function App() {
     </Router>
   );
 }
-
+/*
+<Route path='/some-path' render={props =>
+  <div>
+    <FirstChild />
+    <SecondChild />
+  </div>
+} />
+*/
 /*
 <Route exact path="/">
   {loggedIn ? <Redirect to="/dashboard" /> : <PublicHomePage />}

@@ -2,12 +2,12 @@ import React, {useState} from 'react';
 import axios from 'axios';
 import Home from './Home';
 
-function Signup({liftToken}) {
+function Signup({liftToken, isLoggedIn, selectedLogin, selectedSignup}) {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  //const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   function handleNameChange(e) {
     setName(e.target.value)
@@ -37,22 +37,22 @@ function Signup({liftToken}) {
       } else {
         localStorage.setItem('mernToken', res.data.token);
         liftToken(res.data);
-        setIsLoggedIn(true);
+        //setIsLoggedIn(true);
       }
     }).catch(err => {
       setMessage("Maximum accounts exceeded. Please try again later.");
     })
   }
 
-  if (isLoggedIn) {
+  if (isLoggedIn && selectedSignup && !selectedLogin) {
     return (
-      <>
+      <div>
         <Home />
-      </>
+      </div>
     )
   } else {
     return (
-      <div className="signup">
+      <div className="signup" style={{display: selectedLogin ? 'none' : 'inline-block'}}>
         <h3>Create a New Account:</h3>
         <form className='signupform' onSubmit={handleSubmit}>
           <input onChange={handleNameChange}
