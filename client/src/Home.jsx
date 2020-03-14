@@ -10,7 +10,7 @@ const headers = {
   'Accept': 'application/json',
 }
 
-function ParksByState() {
+function Home({isLoggedIn}) {
   const [allParks, setAllParks] = useState([]);
   const [load, setLoad] = useState(false);
 
@@ -41,7 +41,7 @@ function ParksByState() {
     return () => {
       source.cancel();
     }
-  }, []);
+  }, [isLoggedIn]);
 
   let content;
 
@@ -72,4 +72,4 @@ function ParksByState() {
 
 }
 
-export default ParksByState;
+export default Home;
