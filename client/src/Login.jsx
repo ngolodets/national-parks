@@ -6,7 +6,6 @@ function Login({liftToken, isLoggedIn, selectedSignup, selectedLogin}) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
-  //const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   function handleEmailChange(e) {
     setEmail(e.target.value);
@@ -27,7 +26,6 @@ function Login({liftToken, isLoggedIn, selectedSignup, selectedLogin}) {
       } else {
         localStorage.setItem('mernToken', res.data.token);
         liftToken(res.data);
-        //setIsLoggedIn(true);
       }
     }).catch(err => {
       setMessage("Maximum login attempts exceeded. Please try again later.")
@@ -42,22 +40,36 @@ function Login({liftToken, isLoggedIn, selectedSignup, selectedLogin}) {
     )
   } else {
     return ( 
-      <div className='login' style={{display: selectedSignup ? 'none' : 'inline-block'}}> 
-        <h3>Log into Your Account:</h3>
-        <form onSubmit={handleSubmit}>
-          <input onChange={handleEmailChange} 
-                  value={email} 
-                  type="email"
-                  name="email"
-                  placeholder="Enter your email..."
-                  className="loginsignup" /><br />
-          <input onChange={handlePasswordChange}
-                  value={password}
-                  type="password" 
-                  name="password"
-                  placeholder="Enter your password..." 
-                  className="loginsignup" /><br />
-          <input type="submit" value="LOG IN!" className='submit'/>
+      <div className='row' style={{display: selectedSignup ? 'none' : 'inline-block'}}> 
+        <h4>Log into Your Account:</h4>
+        <form className='col s12' onSubmit={handleSubmit}>
+          <div className='row'>
+            <div className='input-field col s12'>
+              <input onChange={handleEmailChange}
+                      id='email' 
+                      value={email} 
+                      type="email"
+                      name="email"
+                      className="loginsignup" />
+              <label>Email</label>
+            </div>
+          </div>
+          <br />
+          <div className='row'>
+            <div className='input-field col s12'>
+              <input onChange={handlePasswordChange}
+                    id='password'
+                    value={password}
+                    type="password" 
+                    name="password" 
+                    className="loginsignup" />
+              <label>Password</label>
+            </div>
+          </div>
+          <br />
+          <button className="btn waves-effect waves-light" type="submit" name="action">
+            Submit
+          </button>
         </form>
       </div>
     )
