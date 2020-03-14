@@ -16,6 +16,7 @@ app.use(cors());
 app.use(express.urlencoded({extended: false}));
 app.use(express.json());
 app.use(helmet());
+//app.use(express.static(__dirname + '/public'));
 
 const loginLimiter = new RateLimit({
   windowMs: 5*60*1000,

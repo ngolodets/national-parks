@@ -11,8 +11,9 @@ import Login from './Login';
 import Signup from './Signup';
 import LandingPage from './LandingPage';
 import Home from './Home';
-//import NavComponent from './NavComponent';
-//import 'materialize-css/dist/css/materialize.min.css';
+import Footer from './Footer';
+import 'materialize-css/dist/css/materialize.min.css';
+//import M from 'materialize-css';
 
 import './index.css';
 
@@ -23,10 +24,16 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [selectedLogin, setSelectedLogin] = useState(false);
   const [selectedSignup, setSelectedSignup] = useState(false);
+  
   //const [apiData, setApiData] = useState(null);
 
   useEffect(() => {
     var token = localStorage.getItem('mernToken');
+
+    const M = window.M;
+    
+    var sidenav = document.querySelectorAll('.sidenav');
+    M.Sidenav.init(sidenav, {});
 
     if (!token || token === 'undefined') {
       localStorage.removeItem('mernToken');
@@ -61,52 +68,95 @@ function App() {
     setIsLoggedIn(false);
   }
 
-  let content;
+  //let content;
 
-  if (Object.keys(user).length > 1) {
-    content = (
-      <>
-        {/* <NavComponent /> */}
-        {/* <p>Hello, {user.name}</p>
-        <div onClick={logout}>LOGOUT</div> */}
-        {/* <Home /> */}
-      </>
-    )
-  } else {
-    content = (
-      <>
-        {/* <Login liftToken={setToken} />
-        <Signup liftToken={setToken} /> */}
-        {/* <LandingPage /> */}
-      </>
-    )
-  }
+  // if (Object.keys(user).length > 1) {
+  //   content = (
+  //     <>
+  //       {/* <NavComponent /> */}
+  //       {/* <p>Hello, {user.name}</p>
+  //       <div onClick={logout}>LOGOUT</div> */}
+  //       {/* <Home /> */}
+  //     </>
+  //   )
+  // } else {
+  //   content = (
+  //     <>
+  //       {/* <Login liftToken={setToken} />
+  //       <Signup liftToken={setToken} /> */}
+  //       {/* <LandingPage /> */}
+  //     </>
+  //   )
+  // }
 
   return (
     <Router>
       <div className="App">
-        <h1>National Parks App</h1>
-        <nav className='navbar navbar-expand-lg navbar-light bg-dark'>
-          <ul className='navbar-nav mr-auto'>
-            <li className='nav-link'>
-              <p>Hello, {user.name}</p>
-            </li>
-            <li>
-              <Link to={'/home'} className='nav-link'>Home</Link>
-            </li>
-            <li>
-              <Link to={'/login'} className='nav-link'>Login | Signup</Link>
-            </li>
-            {/* <li>
-              <Link to={'/signup'} className='nav-link'>Signup</Link>
-            </li> */}
-            <li onClick={logout}>
-              <Link to='/logout' className='nav-link'>Logout</Link>
-            </li>
-          </ul>
-        </nav>
-
+        <h3>National Parks App</h3>
+        <div className='navbar-fixed'>
+          <nav>
+            <div className='nav-wrapper'>
+              <Link to={'/logout'} 
+                className='brand-logo' 
+                style={{display: isLoggedIn ? 'inline' : 'none'}}
+                onClick={logout}
+              >
+                Hello, {user.name}
+              </Link>
+              <Link to={'#'} data-target='mobile-demo' className='sidenav-trigger'>
+                <i className='material-icons'>menu</i>
+              </Link>
+              <ul id='nav-mobile' className='right hide-on-med-and-down'>
+                {/* <li className='nav-link' style={{display: isLoggedIn ? 'inline' : 'none'}}>
+                  <p>Hello, {user.name}</p>
+                </li> */}
+                <li className='active'>
+                  <Link to={'/search'}>
+                    <i className="material-icons left">search</i>
+                    Search
+                  </Link>
+                </li>
+                {/* <li className='active'><i className="material-icons">search</i></li> */}
+                <li className='active'>
+                  <Link to={'/home'}>Home</Link>
+                </li>
+                <li className='active' style={{display: isLoggedIn ? 'none' : 'inline'}}>
+                  <Link to={'/login'}>
+                    <i className="medium material-icons">account_circle</i>
+                  </Link>
+                </li>
+                {/* <li>
+                  <Link to={'/signup'} className='nav-link'>Signup</Link>
+                </li> */}
+                <li className='active' onClick={logout} style={{display: isLoggedIn ? 'inline' : 'none'}}>
+                  <Link to='/logout' className='waves-effect waves-light btn'>Logout</Link>
+                </li>
+              </ul>
+            </div>
+          </nav>
+        </div>
         <hr />
+        <ul className='sidenav' 
+          id='mobile-demo'
+        >
+          <li className='active'>
+            <Link to={'/search'}>
+              <i className="material-icons left">search</i>
+              Search
+            </Link>
+          </li>       
+          <li className='active'>
+            <Link to={'/home'}>Home</Link>
+          </li>
+          <li className='active' style={{display: isLoggedIn ? 'none' : 'inline'}}>
+            <Link to={'/login'}>
+              <i className="medium material-icons">account_circle</i>
+            </Link>
+          </li>
+          <li className='active' onClick={logout} style={{display: isLoggedIn ? 'inline' : 'none'}}>
+            <Link to='/logout' className='waves-effect waves-light btn'>Logout</Link>
+          </li>
+        </ul>
 
         <Switch>
           {/* <Route path='/login' component={Login} liftToken={setToken} setIsLoggedIn={setIsLoggedIn} /> */}
@@ -133,8 +183,9 @@ function App() {
             {!isLoggedIn ? <Redirect to='/' /> : <Home />}
           </Route>
         </Switch>
-        {content}
+        {/* {content} */}
       </div>
+      <Footer />
     </Router>
   );
 }

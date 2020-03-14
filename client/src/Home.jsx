@@ -1,7 +1,8 @@
 import dotenv from 'dotenv';
 import React, {useState, useEffect} from 'react';
 import axios from 'axios';
-import Loader from './Loader';
+//import Loader from './Loader';
+import Spinner from './Spinner';
 
 dotenv.config();
 
@@ -59,7 +60,8 @@ function Home({isLoggedIn}) {
     content = (
       <div>
         <p>Loading data...</p>
-        <Loader />
+        {/* <Loader /> */}
+        <Spinner />
       </div>
     )
   }
