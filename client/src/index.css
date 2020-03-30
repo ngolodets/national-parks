@@ -8,6 +8,13 @@ body {
   display: flex;
   min-height: 100vh;
   flex-direction: column;
+  background-color: rgb(110, 108, 108);
+  font-size: calc(0.5em + 2vmin);
+}
+
+#mobile-demo {
+  background-color: #b2dfdb;
+  opacity: 0.9;
 }
 
 code {
@@ -15,6 +22,9 @@ code {
     monospace;
 }
 
+input {
+  background-color: rgb(110, 108, 108);
+}
 .landingPagePics {
   width: 100px;
   height: 100px;

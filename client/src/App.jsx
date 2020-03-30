@@ -92,10 +92,10 @@ function App() {
   return (
     <Router>
       <div className="App">
-        <h3>National Parks App</h3>
+        {/* <h3>National Parks App</h3> */}
         <div className='navbar-fixed'>
           <nav>
-            <div className='nav-wrapper'>
+            <div className='nav-wrapper grey darken-3'>
               <Link to={'/logout'} 
                 className='brand-logo' 
                 style={{display: isLoggedIn ? 'inline' : 'none'}}
@@ -135,6 +135,7 @@ function App() {
             </div>
           </nav>
         </div>
+        <h3>National Parks App</h3>
         <hr />
         <ul className='sidenav' 
           id='mobile-demo'

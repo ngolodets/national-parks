@@ -44,7 +44,7 @@ function Login({liftToken, isLoggedIn, selectedSignup, selectedLogin}) {
         <h4>Log into Your Account:</h4>
         <form className='col s12' onSubmit={handleSubmit}>
           <div className='row'>
-            <div className='input-field col s12'>
+            <div className='input-field col s7' style={{marginBottom: '0', backgroundColor: 'rgba(110, 108, 108)'}}>
               <input onChange={handleEmailChange}
                       id='email' 
                       value={email} 
@@ -53,10 +53,8 @@ function Login({liftToken, isLoggedIn, selectedSignup, selectedLogin}) {
                       className="loginsignup" />
               <label>Email</label>
             </div>
-          </div>
-          <br />
-          <div className='row'>
-            <div className='input-field col s12'>
+            <br />
+            <div className='input-field col s7' style={{marginBottom: '0'}}>
               <input onChange={handlePasswordChange}
                     id='password'
                     value={password}
@@ -69,7 +67,7 @@ function Login({liftToken, isLoggedIn, selectedSignup, selectedLogin}) {
           <br />
           <button className="btn waves-effect waves-light" type="submit" name="action">
             Submit
-          </button>
+          </button>  
         </form>
       </div>
     )
