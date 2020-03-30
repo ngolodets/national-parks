@@ -64,11 +64,28 @@ function LandingPage() {
       //   )
       // })
       return (
-        <div key={index}>
-          <p>{park.name}</p>
-          <p>{park.states}</p>
-          <img className='landingPagePics' src={images[0].url} alt={images.url}/>
-          {/* {pic} */}
+        // <div key={index}>
+        //   <p>{park.name}</p>
+        //   <p>{park.states}</p>
+        //   <img className='landingPagePics' src={images[0].url} alt={images.url}/>
+        //   {/* {pic} */}
+        // </div>
+
+        <div className="row" key={index}>
+          <div className="col s12 m7">
+            <div className="card">
+              <div className="card-image">
+                <img src={images[0].url} alt={images.url} />
+                <span className="card-title">{park.name}</span>
+              </div>
+              <div className="card-content">
+                <p>{park.description}</p>
+              </div>
+              <div className="card-action">
+                <a href={park.url} target="_blank" rel="noopener noreferrer">Click to Visit Park Homepage</a>
+              </div>
+            </div>
+          </div>
         </div>
       )
     })
