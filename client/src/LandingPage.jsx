@@ -61,14 +61,14 @@ function LandingPage() {
               <div className="card-image">
                 <img className='materialboxed activator responsive-img medium' src={images[0].url} alt={images.url} style={{height: '175px', width: '100%'}}/>
               </div>
-              <div className="card-content" style={{height: '110px'}}>
+              <div className="card-content grey" style={{height: '110px'}}>
                 <span className="card-title activator">{park.name}<i className="material-icons right">more_vert</i></span>
               </div>
               <div className="card-reveal teal lighten-1">
-                <span className='card-title' style={{weight: 'bold', color: 'white'}}>About Park:<i className='material-icons right'>close</i></span>
+                <span className='card-title' style={{weight: 'bolder', color: 'white'}}>About Park<i className='material-icons right'>close</i></span>
                 <p>{park.description}</p>
               </div>
-              <div className="card-action" id='park-link-div'>
+              <div className="card-action grey lighten-3" id='park-link-div'>
                 <a href={park.url} target="_blank" rel="noopener noreferrer" id='park-link-text'>Click to Visit Park Homepage</a>
               </div>
             </div>
@@ -76,10 +76,11 @@ function LandingPage() {
       )
     })
   } else {
-    content = (
-      <div>
+    //content = (
+    return (
+      <div style={{textAlign: 'center'}}>
         <p>Loading data...</p>
-        <Spinner />
+        <Spinner/>
       </div>
     ) 
   }

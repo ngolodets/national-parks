@@ -11,9 +11,9 @@ import Login from './Login';
 import Signup from './Signup';
 import LandingPage from './LandingPage';
 import Home from './Home';
+import Search from './Search';
 import Footer from './Footer';
 import 'materialize-css/dist/css/materialize.min.css';
-//import M from 'materialize-css';
 
 import './index.css';
 
@@ -92,51 +92,53 @@ function App() {
   return (
     <Router>
       <div className="App">
-        {/* <h3>National Parks App</h3> */}
         <div className='navbar-fixed'>
           <nav>
             <div className='nav-wrapper grey darken-3'>
               <Link to={'/logout'} 
-                className='brand-logo' 
-                style={{display: isLoggedIn ? 'inline' : 'none'}}
-                onClick={logout}
+                    className='brand-logo' 
+                    style={{display: isLoggedIn ? 'inline' : 'none'}}
+                    onClick={logout}
               >
                 Hello, {user.name}
               </Link>
-              <Link to={'#'} data-target='mobile-demo' className='sidenav-trigger'>
+              <Link to={'#'} 
+                    data-target='mobile-demo' 
+                    className='sidenav-trigger'>
                 <i className='material-icons'>menu</i>
               </Link>
               <ul id='nav-mobile' className='right hide-on-med-and-down'>
-                {/* <li className='nav-link' style={{display: isLoggedIn ? 'inline' : 'none'}}>
-                  <p>Hello, {user.name}</p>
-                </li> */}
                 <li className='active'>
                   <Link to={'/search'}>
                     <i className="material-icons left">search</i>
                     Search
                   </Link>
                 </li>
-                {/* <li className='active'><i className="material-icons">search</i></li> */}
                 <li className='active'>
                   <Link to={'/home'}>Home</Link>
                 </li>
-                <li className='active' style={{display: isLoggedIn ? 'none' : 'inline'}}>
+                <li className='active' 
+                    style={{display: isLoggedIn ? 'none' : 'inline'}}
+                >
                   <Link to={'/login'}>
                     <i className="medium material-icons">account_circle</i>
                   </Link>
                 </li>
-                {/* <li>
-                  <Link to={'/signup'} className='nav-link'>Signup</Link>
-                </li> */}
-                <li className='active' onClick={logout} style={{display: isLoggedIn ? 'inline' : 'none'}}>
-                  <Link to='/logout' className='waves-effect waves-light btn'>Logout</Link>
+                <li className='active' 
+                    onClick={logout} 
+                    style={{display: isLoggedIn ? 'inline' : 'none'}}
+                >
+                  <Link to='/logout' 
+                        className='waves-effect waves-light btn'
+                  >
+                    Logout
+                  </Link>
                 </li>
               </ul>
             </div>
           </nav>
         </div>
-        <h3>National Parks App</h3>
-        {/* <hr /> */}
+        
         <ul className='sidenav' 
           id='mobile-demo'
         >
@@ -151,13 +153,15 @@ function App() {
           </li>
           <li className='active' style={{display: isLoggedIn ? 'none' : 'inline'}}>
             <Link to={'/login'}>
-              <i className="medium material-icons">account_circle</i>
+              <i className="small material-icons">account_circle</i>
             </Link>
           </li>
           <li className='active' onClick={logout} style={{display: isLoggedIn ? 'inline' : 'none'}}>
             <Link to='/logout' className='waves-effect waves-light btn'>Logout</Link>
           </li>
         </ul>
+
+        <h3 id='app-title'>National Parks App</h3>
 
         <Switch>
           {/* <Route path='/login' component={Login} liftToken={setToken} setIsLoggedIn={setIsLoggedIn} /> */}
@@ -177,6 +181,7 @@ function App() {
           <Route exact path='/'>
             {isLoggedIn ? <Redirect to='/home' /> : <LandingPage />}
           </Route>
+          <Route path='/search' component={Search}></Route>
           <Route path='/home' component={Home} isLoggedIn={isLoggedIn}>
             {!isLoggedIn ? <Redirect to='/' /> : <Home />}
           </Route>

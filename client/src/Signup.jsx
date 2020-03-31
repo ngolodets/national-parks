@@ -52,7 +52,7 @@ function Signup({liftToken, isLoggedIn, selectedLogin, selectedSignup}) {
     )
   } else {
     return (
-      <div className="row" style={{display: selectedLogin ? 'none' : 'inline-block'}}>
+      <div className="row" style={{display: selectedLogin ? 'none' : 'inline-block', marginLeft: '1.4em'}}>
         <h4>Create a New Account:</h4>
         <form className='col s12' onSubmit={handleSubmit}>
           <div className='row'>

@@ -58,7 +58,7 @@ function Home({isLoggedIn}) {
     })
   } else {
     content = (
-      <div>
+      <div style={{textAlign: 'center'}}>
         <p>Loading data...</p>
         {/* <Loader /> */}
         <Spinner />
