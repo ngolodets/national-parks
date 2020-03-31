@@ -189,9 +189,10 @@ function App() {
             {!isLoggedIn ? <Redirect to='/' /> : <Home />}
           </Route>
         </Switch>
-        {/* {content} */}
       </div>
+
       <Footer />
+
     </Router>
   );
 }
