@@ -1,7 +1,6 @@
 import dotenv from 'dotenv';
 import React, {useState, useEffect} from 'react';
 import axios from 'axios';
-//import Loader from './Loader';
 import Spinner from './Spinner';
 
 
@@ -56,23 +55,7 @@ function LandingPage() {
     content = allParks.map((park, index) => {
       let images = park.images;
       
-      // let pic = images.map((image, indx) => {
-      //   return (
-      //     <div key={indx}>
-      //       <img src={image.url} alt={image.alt}/>
-      //     </div>
-      //   )
-      // })
       return (
-        // <div key={index}>
-        //   <p>{park.name}</p>
-        //   <p>{park.states}</p>
-        //   <img className='landingPagePics' src={images[0].url} alt={images.url}/>
-        //   {/* {pic} */}
-        // </div>
-
-        // <div className='container' key={index}>
-        // <div className="row text-center" id='landing-page-wrap'>
           <div className="col 14 m4 s12" id='landing-page-card' key={index}>
             <div className="card hoverable" key={index}>
               <div className="card-image">
@@ -90,15 +73,12 @@ function LandingPage() {
               </div>
             </div>
           </div>
-        // </div>
-        // </div>
       )
     })
   } else {
     content = (
       <div>
         <p>Loading data...</p>
-        {/* <Loader /> */}
         <Spinner />
       </div>
     ) 
