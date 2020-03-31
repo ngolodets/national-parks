@@ -30,6 +30,16 @@ input {
   height: 100px;
 }
 
+#park-link-div:hover {
+  background-color: #ffab40;
+  color: white;
+}
+
+#park-link-text:hover {
+  color: white;
+  weight: bold;
+}
+
 main {
   flex: 1 0 auto;
 }

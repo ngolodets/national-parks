@@ -19,7 +19,7 @@ function LandingPage() {
   const [load, setLoad] = useState(false);
 
   useEffect(() => {
-    let url = `https://developer.nps.gov/api/v1/parks?parkCode=&limit=5&api_key=${process.env.REACT_APP_API_KEY}`;
+    let url = `https://developer.nps.gov/api/v1/parks?parkCode=&limit=9&api_key=${process.env.REACT_APP_API_KEY}`;
 
     const CancelToken = axios.CancelToken;
     const source = CancelToken.source();
@@ -71,22 +71,27 @@ function LandingPage() {
         //   {/* {pic} */}
         // </div>
 
-        <div className="row" key={index}>
-          <div className="col s12 m7">
-            <div className="card">
+        // <div className='container' key={index}>
+        // <div className="row text-center" id='landing-page-wrap'>
+          <div className="col 14 m4 s12" id='landing-page-card' key={index}>
+            <div className="card hoverable" key={index}>
               <div className="card-image">
-                <img src={images[0].url} alt={images.url} />
-                <span className="card-title">{park.name}</span>
+                <img className='materialboxed activator responsive-img medium' src={images[0].url} alt={images.url} style={{height: '175px', width: '100%'}}/>
               </div>
-              <div className="card-content">
+              <div className="card-content" style={{height: '110px'}}>
+                <span className="card-title activator">{park.name}<i className="material-icons right">more_vert</i></span>
+              </div>
+              <div className="card-reveal teal lighten-1">
+                <span className='card-title' style={{weight: 'bold', color: 'white'}}>About Park:<i className='material-icons right'>close</i></span>
                 <p>{park.description}</p>
               </div>
-              <div className="card-action">
-                <a href={park.url} target="_blank" rel="noopener noreferrer">Click to Visit Park Homepage</a>
+              <div className="card-action" id='park-link-div'>
+                <a href={park.url} target="_blank" rel="noopener noreferrer" id='park-link-text'>Click to Visit Park Homepage</a>
               </div>
             </div>
           </div>
-        </div>
+        // </div>
+        // </div>
       )
     })
   } else {
@@ -101,7 +106,11 @@ function LandingPage() {
 
   return (
     <>
-      {content}
+      <div className='container'>
+        <div className="row text-center">
+          {content}
+        </div>
+      </div>
     </>
   )
 

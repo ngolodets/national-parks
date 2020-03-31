@@ -136,7 +136,7 @@ function App() {
           </nav>
         </div>
         <h3>National Parks App</h3>
-        <hr />
+        {/* <hr /> */}
         <ul className='sidenav' 
           id='mobile-demo'
         >
