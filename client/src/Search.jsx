@@ -29,6 +29,7 @@ function Search() {
   function handleSubmit(e, input) {
     e.preventDefault();
     setLoading(true);
+    setParks([]);
     input = searchPhrase;
     input = input.toLowerCase();
     let url = `https://api.nps.gov/api/v1/parks?q=${input}%20&api_key=${process.env.REACT_APP_API_KEY}`;
@@ -36,7 +37,7 @@ function Search() {
     axios.get(url, headers)
       .then((response) => {
         let info = response.data;
-        console.log(info);
+        //console.log(info);
         setParks(info.data);
         setLoading(false);
         setSearchPhrase('');
@@ -70,7 +71,11 @@ function Search() {
         <div className="col 14 m4 s12" id='landing-page-card' key={index}>
           <div className="card hoverable">
             <div className="card-image">
-              <img className='materialboxed activator responsive-img medium' src={images[0].url} alt={images.url} style={{height: '175px', width: '100%'}}/>
+              <img className='materialboxed activator responsive-img medium' 
+                    src={images.length ? images[0].url : '../bear.png'} 
+                    alt={park.fullName} 
+                    style={{height: '175px', width: '100%'}}
+              />
             </div>
             <div className="card-content grey" style={{height: '125px'}}>
               <span className="card-title activator">{park.fullName}<i className="material-icons right">more_vert</i></span>
