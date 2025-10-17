@@ -3,13 +3,9 @@ import React, {useState, useEffect} from 'react';
 import axios from 'axios';
 //import Loader from './Loader';
 import Spinner from './Spinner';
+import { getWithCache, API_HEADERS } from './utils/apiClient';
 
 dotenv.config();
-
-const headers = {
-  'X-Api-Key': process.env.REACT_APP_API_KEY,
-  'Accept': 'application/json',
-}
 
 function Home({isLoggedIn}) {
   const [allParks, setAllParks] = useState([]);
@@ -20,22 +16,24 @@ function Home({isLoggedIn}) {
     
     const CancelToken = axios.CancelToken;
     const source = CancelToken.source();
+    const loadData = async () => {
+      try {
+        const response = await getWithCache(url, {
+          cancelToken: source.token,
+          headers: { ...API_HEADERS },
+        });
 
-    const loadData = () => {
-      axios.get(url, {cancelToken: source.token}, headers)
-        .then(response => {
-          let parks = response.data;
-          console.log(parks.data);
-          setAllParks(parks.data);
-          setLoad(true);
-        })
-        .catch((err) => {
-          if (axios.isCancel(err)) {
-            console.log('Request Cancelled:', err.message);
-          } else {
-            console.log('Something went wrong ', err.message);
-          }
-      })
+        let parks = response.data;
+        console.log(parks.data);
+        setAllParks(parks.data);
+        setLoad(true);
+      } catch (err) {
+        if (axios.isCancel(err)) {
+          console.log('Request Cancelled:', err.message);
+        } else {
+          console.log('Something went wrong ', err.message);
+        }
+      }
     };
 
     loadData();
