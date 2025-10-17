@@ -2,6 +2,7 @@ import axios from 'axios';
 
 const cache = new Map();
 const DEFAULT_TTL = 5 * 60 * 1000;
+const DEFAULT_MAX_ENTRIES = 20;
 const INCLUDED_CONFIG_KEYS = ['headers', 'params'];
 
 export const API_HEADERS = Object.freeze({
@@ -55,6 +56,72 @@ function createCacheKey(url, config = {}) {
   return `${url}::${stableSerialize(relevantConfig)}`;
 }
 
+function pruneExpiredEntries(referenceTime = Date.now()) {
+  for (const [key, entry] of cache) {
+    if (entry.expiresAt !== Infinity && entry.expiresAt <= referenceTime) {
+      cache.delete(key);
+    }
+  }
+}
+
+function enforceSizeLimit(maxEntries) {
+  if (maxEntries === Infinity) {
+    return;
+  }
+
+  if (!Number.isFinite(maxEntries) || maxEntries <= 0) {
+    cache.clear();
+    return;
+  }
+
+  while (cache.size > maxEntries) {
+    const oldestKey = cache.keys().next().value;
+    if (!oldestKey) {
+      break;
+    }
+    cache.delete(oldestKey);
+  }
+}
+
+function touchEntry(cacheKey, entry) {
+  cache.delete(cacheKey);
+  cache.set(cacheKey, entry);
+}
+
+function simplifyResponse(response) {
+  const { data, status, statusText, headers } = response;
+  const simplified = {
+    data,
+    status,
+    statusText,
+    headers,
+  };
+
+  if (response.config) {
+    const { url: configUrl, method, params } = response.config;
+    simplified.config = {
+      url: configUrl,
+      method,
+      params,
+    };
+  }
+
+  return simplified;
+}
+
+function getNormalizedMaxEntries(maxEntries) {
+  if (maxEntries === Infinity) {
+    return Infinity;
+  }
+
+  const parsed = Number(maxEntries);
+  if (Number.isFinite(parsed) && parsed > 0) {
+    return Math.floor(parsed);
+  }
+
+  return DEFAULT_MAX_ENTRIES;
+}
+
 export function clearCache() {
   cache.clear();
 }
@@ -64,34 +131,53 @@ export function removeFromCache(url, config = {}) {
 }
 
 export function getWithCache(url, config = {}, options = {}) {
-  const { ttl = DEFAULT_TTL, forceRefresh = false } = options;
+  const {
+    ttl = DEFAULT_TTL,
+    forceRefresh = false,
+    maxEntries = DEFAULT_MAX_ENTRIES,
+  } = options;
 
-  if (forceRefresh || ttl <= 0) {
-    return axios.get(url, config);
-  }
-
+  const normalizedMaxEntries = getNormalizedMaxEntries(maxEntries);
   const cacheKey = createCacheKey(url, config);
   const now = Date.now();
-  const existingEntry = cache.get(cacheKey);
 
-  if (existingEntry) {
-    if (existingEntry.data && (existingEntry.expiresAt === Infinity || existingEntry.expiresAt > now)) {
-      return Promise.resolve(existingEntry.data);
-    }
+  pruneExpiredEntries(now);
 
-    if (existingEntry.promise) {
-      return existingEntry.promise;
-    }
-
+  if (forceRefresh) {
     cache.delete(cacheKey);
+  } else if (ttl > 0) {
+    const existingEntry = cache.get(cacheKey);
+
+    if (existingEntry) {
+      if (
+        existingEntry.data &&
+        (existingEntry.expiresAt === Infinity || existingEntry.expiresAt > now)
+      ) {
+        touchEntry(cacheKey, existingEntry);
+        return Promise.resolve(existingEntry.data);
+      }
+
+      if (existingEntry.promise) {
+        return existingEntry.promise;
+      }
+
+      cache.delete(cacheKey);
+    }
+  }
+
+  if (ttl <= 0) {
+    return axios.get(url, config).then(simplifyResponse);
   }
 
   const expiresAt = ttl === Infinity ? Infinity : now + ttl;
 
-  const requestPromise = axios.get(url, config)
+  const requestPromise = axios
+    .get(url, config)
     .then(response => {
-      cache.set(cacheKey, { data: response, expiresAt });
-      return response;
+      const simplified = simplifyResponse(response);
+      cache.set(cacheKey, { data: simplified, expiresAt });
+      enforceSizeLimit(normalizedMaxEntries);
+      return simplified;
     })
     .catch(error => {
       cache.delete(cacheKey);
@@ -99,11 +185,12 @@ export function getWithCache(url, config = {}, options = {}) {
     });
 
   cache.set(cacheKey, { promise: requestPromise, expiresAt });
+  enforceSizeLimit(normalizedMaxEntries);
 
   return requestPromise;
 }
 
 export function cacheSize() {
+  pruneExpiredEntries();
   return cache.size;
 }
-
