@@ -56,14 +56,6 @@ function createCacheKey(url, config = {}) {
   return `${url}::${stableSerialize(relevantConfig)}`;
 }
 
-function pruneExpiredEntries(referenceTime = Date.now()) {
-  for (const [key, entry] of cache) {
-    if (entry.expiresAt !== Infinity && entry.expiresAt <= referenceTime) {
-      cache.delete(key);
-    }
-  }
-}
-
 function enforceSizeLimit(maxEntries) {
   if (maxEntries === Infinity) {
     return;
@@ -141,8 +133,6 @@ export function getWithCache(url, config = {}, options = {}) {
   const cacheKey = createCacheKey(url, config);
   const now = Date.now();
 
-  pruneExpiredEntries(now);
-
   if (forceRefresh) {
     cache.delete(cacheKey);
   } else if (ttl > 0) {
@@ -191,6 +181,5 @@ export function getWithCache(url, config = {}, options = {}) {
 }
 
 export function cacheSize() {
-  pruneExpiredEntries();
   return cache.size;
 }
