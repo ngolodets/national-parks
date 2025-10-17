@@ -2,14 +2,10 @@ import dotenv from 'dotenv';
 import React, {useState, useEffect} from 'react';
 import axios from 'axios';
 import Spinner from './Spinner';
+import { getWithCache, API_HEADERS } from './utils/apiClient';
 
 
 dotenv.config();
-
-const headers = {
-  'X-Api-Key': process.env.REACT_APP_API_KEY,
-  'Accept': 'application/json',
-}
 
 //response.setHeader("Set-Cookie", "HttpOnly;Secure;SameSite=Strict");
 
@@ -23,22 +19,25 @@ function LandingPage() {
     const CancelToken = axios.CancelToken;
     const source = CancelToken.source();
 
-    const loadData = () => {
-      axios.get(url, {cancelToken: source.token}, headers)
-        .then((response) => {
-          console.log(response.headers);
-          let allParks = response.data;
-          console.log(allParks.data);
-          setParks(allParks.data);
-          setLoad(true);
-        })
-        .catch((err) => {
-          if (axios.isCancel(err)) {
-            console.log('Request Cancelled ', err.message);
-          } else {
-            console.log('Something went wrong ', err.message);
-          }
-      })
+    const loadData = async () => {
+      try {
+        const response = await getWithCache(url, {
+          cancelToken: source.token,
+          headers: { ...API_HEADERS },
+        });
+
+        console.log(response.headers);
+        let allParks = response.data;
+        console.log(allParks.data);
+        setParks(allParks.data);
+        setLoad(true);
+      } catch (err) {
+        if (axios.isCancel(err)) {
+          console.log('Request Cancelled ', err.message);
+        } else {
+          console.log('Something went wrong ', err.message);
+        }
+      }
     };
 
     loadData();
@@ -98,4 +97,3 @@ function LandingPage() {
 }
 
 export default LandingPage;
-

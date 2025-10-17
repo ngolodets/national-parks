@@ -1,14 +1,9 @@
 import dotenv from 'dotenv';
 import React, {useState} from 'react';
-import axios from 'axios';
 import Spinner from './Spinner';
+import { getWithCache, API_HEADERS } from './utils/apiClient';
 
 dotenv.config();
-
-const headers = {
-  'X-Api-Key': process.env.REACT_APP_API_KEY,
-  'Accept': 'application/json',
-}
 
 function Search() {
   const [parks, setParks] = useState([]);
@@ -26,27 +21,27 @@ function Search() {
     setSearchPhrase(phrase.trim());
   }
 
-  function handleSubmit(e, input) {
+  async function handleSubmit(e) {
     e.preventDefault();
     setLoading(true);
     setParks([]);
-    input = searchPhrase;
-    input = input.toLowerCase();
-    let url = `https://api.nps.gov/api/v1/parks?q=${input}%20&api_key=${process.env.REACT_APP_API_KEY}`;
+    const normalizedInput = searchPhrase.toLowerCase();
+    const url = `https://api.nps.gov/api/v1/parks?q=${normalizedInput}%20&api_key=${process.env.REACT_APP_API_KEY}`;
 
-    axios.get(url, headers)
-      .then((response) => {
-        let info = response.data;
-        //console.log(info);
-        setParks(info.data);
-        setLoading(false);
-        setSearchPhrase('');
-      })
-      .catch((err) => {
-        if (err) {
-          console.log(err);
-        }
-      })
+    try {
+      const response = await getWithCache(url, {
+        headers: { ...API_HEADERS },
+      });
+
+      const info = response.data;
+      //console.log(info);
+      setParks(info.data);
+      setSearchPhrase('');
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setLoading(false);
+    }
   }
 
   let searchMessage;
